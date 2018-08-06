@@ -23,7 +23,7 @@ allprojects {
 }
 
 dependencies {
-    implementation 'com.github.pphdsny:DropDownMenu:1.0.0'
+    implementation 'com.github.pphdsny:DropDownMenu:1.0.1'
 }
 ```
 

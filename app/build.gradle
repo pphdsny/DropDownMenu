@@ -28,6 +28,6 @@ dependencies {
     implementation 'com.github.pphdsny:cache:1.0.2.1'
     implementation 'io.reactivex:rxjava:1.2.2'
     implementation 'com.google.code.gson:gson:2.6.2'
-    implementation 'com.github.pphdsny:DropDownMenu:1.0.0'
+    implementation 'com.github.pphdsny:DropDownMenu:1.0.1'
 //    api project(':library')
 }
