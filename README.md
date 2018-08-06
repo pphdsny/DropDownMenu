@@ -8,9 +8,120 @@
 
 ![image.png](https://upload-images.jianshu.io/upload_images/2014593-01c67e96bd6d599b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-## 实现阐述
+## 快速入门
 
-整个的实现都是围绕`ITabFilter`，里面定义了每项筛选项所需的所有操作，`getFilterView`是具体筛选项View，包含`IItemFilter`子项的实现。`getTabView`是筛选tab操作的View。`PPFilterLayout`
+>   **特别说明：** 筛选的数据来源基于 [构建灵活的缓存机制](https://www.jianshu.com/p/a9ae44869294) 实现。
+
+### Gradle依赖
+
+```shell
+allprojects {
+    repositories {
+        ...
+        maven { url "https://jitpack.io" }
+    }
+}
+
+dependencies {
+    implementation 'com.github.pphdsny:DropDownMenu:1.0.0'
+}
+```
+
+### 获取数据
+
+```java 
+    private void initViewData() {
+        //缓存策略，默认从列表中按序读取
+        DefaultCacheStrategy<FilterComplexConditionModel> cacheStrategy = new DefaultCacheStrategy<>(
+                new MemoryCache<FilterComplexConditionModel>(),
+                new LocalCache<FilterComplexConditionModel>(),
+                new AssetCache<FilterComplexConditionModel>()
+        );
+        //数据工厂
+        final CacheFactory<FilterComplexConditionModel> cacheFactory = new CacheFactory<>(cacheStrategy);
+        //筛选参数
+        final FilterCacheParam filterCacheParam = new FilterCacheParam(1002);
+        //获取数据
+        cacheFactory.getData(filterCacheParam)
+                .subscribe(new Action1<FilterComplexConditionModel>() {
+                    @Override
+                    public void call(FilterComplexConditionModel filterComplexConditionModel) {
+                        //将数据保存起来
+                        cacheFactory.saveData(filterCacheParam,filterComplexConditionModel);
+                        //填充tab
+                        setTabData(filterComplexConditionModel);
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        Toast.makeText(MainActivity.this, "没有有效数据", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+```
+
+### 填充tabView
+
+```java
+    private void setTabData(FilterComplexConditionModel filterComplexConditionModel) {
+        //总价
+        MultiFilterVH priceFilterVH = new MultiFilterVH(this);
+        FilterGroupModel priceFilterData = FilterModelConvertUtil.convertToFilterGroupModel(filterComplexConditionModel.getPrice());
+        priceFilterData.getItems().add(0, new FilterIdNameModel(FilterIdNameModel.NO_LIMIT_ITEM_ID, "不限"));
+        priceFilterVH.setFilterSureCallback(new OnFilterListener<FilterGroupModel>() {
+            @Override
+            public void onFilter(FilterGroupModel filterGroupModel) {
+                Toast.makeText(MainActivity.this, filterGroupModel.toString(), Toast.LENGTH_SHORT).show();
+                binding.filterLayout.dismissFilterLayout();
+            }
+        });
+        priceFilterVH.initData(priceFilterData);
+        //过滤条件
+        SingleFilterVH sortFilterVH = new SingleFilterVH(this);
+        FilterGroupModel sortFilterData = FilterModelConvertUtil.convertToFilterGroupModel(filterComplexConditionModel.getSmartOrder());
+        sortFilterVH.setFilterSureCallback(new OnFilterListener<FilterGroupModel>() {
+            @Override
+            public void onFilter(FilterGroupModel filterGroupModel) {
+                Toast.makeText(MainActivity.this, filterGroupModel.toString(), Toast.LENGTH_SHORT).show();
+                binding.filterLayout.dismissFilterLayout();
+            }
+        });
+        sortFilterVH.initData(sortFilterData);
+        //户型
+        MultiFilterVH roomFilterVH = new MultiFilterVH(this);
+        FilterGroupModel roomFilterData = FilterModelConvertUtil.convertToFilterGroupModel(filterComplexConditionModel.getRoomType());
+        roomFilterData.getItems().add(0, new FilterIdNameModel(FilterIdNameModel.NO_LIMIT_ITEM_ID, "不限"));
+        roomFilterVH.setFilterSureCallback(new OnFilterListener<FilterGroupModel>() {
+            @Override
+            public void onFilter(FilterGroupModel filterGroupModel) {
+                Toast.makeText(MainActivity.this, filterGroupModel.toString(), Toast.LENGTH_SHORT).show();
+                binding.filterLayout.dismissFilterLayout();
+            }
+        });
+        roomFilterVH.initData(roomFilterData);
+        //面积
+        MultiFilterVH areaFilterVH = new MultiFilterVH(this);
+        FilterGroupModel areaFilterData = FilterModelConvertUtil.convertToFilterGroupModel(filterComplexConditionModel.getArea());
+        areaFilterData.getItems().add(0, new FilterIdNameModel(FilterIdNameModel.NO_LIMIT_ITEM_ID, "不限"));
+        areaFilterVH.setFilterSureCallback(new OnFilterListener<FilterGroupModel>() {
+            @Override
+            public void onFilter(FilterGroupModel filterGroupModel) {
+                Toast.makeText(MainActivity.this, filterGroupModel.toString(), Toast.LENGTH_SHORT).show();
+                binding.filterLayout.dismissFilterLayout();
+            }
+        });
+        areaFilterVH.initData(areaFilterData);
+
+        //添加到tab中
+        ArrayList tabList = new ArrayList();
+        tabList.add(priceFilterVH);
+        tabList.add(sortFilterVH);
+        tabList.add(roomFilterVH);
+        tabList.add(areaFilterVH);
+        //添加到View中
+        binding.filterLayout.initTab(tabList);
+    }
+```
 
 ## 关键类分析
 
@@ -242,123 +353,6 @@ public class PPFilterLayout extends FrameLayout {
     }
 
 }
-```
-
-## 快速入门
-
->   **特别说明：** 筛选的数据来源基于 [构建灵活的缓存机制](https://www.jianshu.com/p/a9ae44869294) 实现。
-
-### Gradle依赖
-
-```shell
-allprojects {
-    repositories {
-        ...
-        maven { url "https://jitpack.io" }
-    }
-}
-
-dependencies {
-    implementation 'com.github.pphdsny:cache:1.0.2.1'
-    implementation 'io.reactivex:rxjava:1.2.2'
-    implementation 'com.google.code.gson:gson:2.6.2'
-}
-```
-
-### 获取数据
-
-```java 
-    private void initViewData() {
-        //缓存策略，默认从列表中按序读取
-        DefaultCacheStrategy<FilterComplexConditionModel> cacheStrategy = new DefaultCacheStrategy<>(
-                new MemoryCache<FilterComplexConditionModel>(),
-                new LocalCache<FilterComplexConditionModel>(),
-                new AssetCache<FilterComplexConditionModel>()
-        );
-        //数据工厂
-        final CacheFactory<FilterComplexConditionModel> cacheFactory = new CacheFactory<>(cacheStrategy);
-        //筛选参数
-        final FilterCacheParam filterCacheParam = new FilterCacheParam(1002);
-        //获取数据
-        cacheFactory.getData(filterCacheParam)
-                .subscribe(new Action1<FilterComplexConditionModel>() {
-                    @Override
-                    public void call(FilterComplexConditionModel filterComplexConditionModel) {
-                        //将数据保存起来
-                        cacheFactory.saveData(filterCacheParam,filterComplexConditionModel);
-                        //填充tab
-                        setTabData(filterComplexConditionModel);
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        Toast.makeText(MainActivity.this, "没有有效数据", Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
-```
-
-### 填充tabView
-
-```java
-    private void setTabData(FilterComplexConditionModel filterComplexConditionModel) {
-        //总价
-        MultiFilterVH priceFilterVH = new MultiFilterVH(this);
-        FilterGroupModel priceFilterData = FilterModelConvertUtil.convertToFilterGroupModel(filterComplexConditionModel.getPrice());
-        priceFilterData.getItems().add(0, new FilterIdNameModel(FilterIdNameModel.NO_LIMIT_ITEM_ID, "不限"));
-        priceFilterVH.setFilterSureCallback(new OnFilterListener<FilterGroupModel>() {
-            @Override
-            public void onFilter(FilterGroupModel filterGroupModel) {
-                Toast.makeText(MainActivity.this, filterGroupModel.toString(), Toast.LENGTH_SHORT).show();
-                binding.filterLayout.dismissFilterLayout();
-            }
-        });
-        priceFilterVH.initData(priceFilterData);
-        //过滤条件
-        SingleFilterVH sortFilterVH = new SingleFilterVH(this);
-        FilterGroupModel sortFilterData = FilterModelConvertUtil.convertToFilterGroupModel(filterComplexConditionModel.getSmartOrder());
-        sortFilterVH.setFilterSureCallback(new OnFilterListener<FilterGroupModel>() {
-            @Override
-            public void onFilter(FilterGroupModel filterGroupModel) {
-                Toast.makeText(MainActivity.this, filterGroupModel.toString(), Toast.LENGTH_SHORT).show();
-                binding.filterLayout.dismissFilterLayout();
-            }
-        });
-        sortFilterVH.initData(sortFilterData);
-        //户型
-        MultiFilterVH roomFilterVH = new MultiFilterVH(this);
-        FilterGroupModel roomFilterData = FilterModelConvertUtil.convertToFilterGroupModel(filterComplexConditionModel.getRoomType());
-        roomFilterData.getItems().add(0, new FilterIdNameModel(FilterIdNameModel.NO_LIMIT_ITEM_ID, "不限"));
-        roomFilterVH.setFilterSureCallback(new OnFilterListener<FilterGroupModel>() {
-            @Override
-            public void onFilter(FilterGroupModel filterGroupModel) {
-                Toast.makeText(MainActivity.this, filterGroupModel.toString(), Toast.LENGTH_SHORT).show();
-                binding.filterLayout.dismissFilterLayout();
-            }
-        });
-        roomFilterVH.initData(roomFilterData);
-        //面积
-        MultiFilterVH areaFilterVH = new MultiFilterVH(this);
-        FilterGroupModel areaFilterData = FilterModelConvertUtil.convertToFilterGroupModel(filterComplexConditionModel.getArea());
-        areaFilterData.getItems().add(0, new FilterIdNameModel(FilterIdNameModel.NO_LIMIT_ITEM_ID, "不限"));
-        areaFilterVH.setFilterSureCallback(new OnFilterListener<FilterGroupModel>() {
-            @Override
-            public void onFilter(FilterGroupModel filterGroupModel) {
-                Toast.makeText(MainActivity.this, filterGroupModel.toString(), Toast.LENGTH_SHORT).show();
-                binding.filterLayout.dismissFilterLayout();
-            }
-        });
-        areaFilterVH.initData(areaFilterData);
-
-        //添加到tab中
-        ArrayList tabList = new ArrayList();
-        tabList.add(priceFilterVH);
-        tabList.add(sortFilterVH);
-        tabList.add(roomFilterVH);
-        tabList.add(areaFilterVH);
-        //添加到View中
-        binding.filterLayout.initTab(tabList);
-    }
 ```
 
 ## 后记
