@@ -1,0 +1,122 @@
+{
+  "condition_price": {
+    "chunkName": "总价",
+    "options": [
+      {
+        "code": 901,
+        "label": "300万以下"
+      },
+      {
+        "code": 902,
+        "label": "300-500万"
+      },
+      {
+        "code": 903,
+        "label": "500-800万"
+      },
+      {
+        "code": 904,
+        "label": "800-1500万"
+      },
+      {
+        "code": 905,
+        "label": "1500万以上"
+      }
+    ]
+  },
+  "condition_smartOrder": {
+    "chunkName": "智能排序",
+    "options": [
+      {
+        "code": -1,
+        "label": "智能排序"
+      },
+      {
+        "code": -2,
+        "label": "地段评分由高到低"
+      },
+      {
+        "code": -3,
+        "label": "社区评分由高到低"
+      },
+      {
+        "code": -4,
+        "label": "配套评分由高到低"
+      },
+      {
+        "code": -5,
+        "label": "学区评分由高到低"
+      }
+    ]
+  },
+  "condition_area": {
+    "chunkName": "面积（㎡）",
+    "options": [
+      {
+        "code": 441,
+        "label": "60以下"
+      },
+      {
+        "code": 442,
+        "label": "60-80"
+      },
+      {
+        "code": 443,
+        "label": "80-95"
+      },
+      {
+        "code": 444,
+        "label": "95-125"
+      },
+      {
+        "code": 445,
+        "label": "125-145"
+      },
+      {
+        "code": 446,
+        "label": "145-180"
+      },
+      {
+        "code": 447,
+        "label": "180-220"
+      },
+      {
+        "code": 448,
+        "label": "220-250"
+      },
+      {
+        "code": 449,
+        "label": "250以上"
+      }
+    ]
+  },
+  "condition_roomType": {
+    "chunkName": "户型",
+    "options": [
+      {
+        "code": 111,
+        "label": "1室"
+      },
+      {
+        "code": 112,
+        "label": "2室"
+      },
+      {
+        "code": 113,
+        "label": "3室"
+      },
+      {
+        "code": 114,
+        "label": "4室"
+      },
+      {
+        "code": 115,
+        "label": "5室"
+      },
+      {
+        "code": 116,
+        "label": "5室以上"
+      }
+    ]
+  }
+}

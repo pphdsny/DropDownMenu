@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="tab_bg_color">#FFFFFFFF</color>
+    <color name="tab_divide_color">#FFDBDBDB</color>
+    <color name="tab_filter_bg_color">#4D000000</color>
+    <color name="filter_item_selected">#FD5056</color>
+    <color name="filter_item_default">#474747</color>
+    <color name="btn_bg_color">#FD5056</color>
+
+</resources>
