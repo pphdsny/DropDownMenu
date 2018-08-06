@@ -51,6 +51,10 @@ public class PPFilterLayout extends FrameLayout {
         });
     }
 
+    /**
+     * 初始化tab
+     * @param tabs
+     */
     public void initTab(List<ITabFilter> tabs) {
         this.tabFilters = tabs;
         if (tabs == null) {
@@ -96,6 +100,10 @@ public class PPFilterLayout extends FrameLayout {
         binding.llFilter.addView(tabView, layoutParams);
     }
 
+    /**
+     * 显示筛选项
+     * @param tab
+     */
     private void showFilterLayout(ITabFilter tab) {
         if (tab == null) return;
         if (currentShowFilter == tab && tab.isShowing()) {
@@ -111,6 +119,9 @@ public class PPFilterLayout extends FrameLayout {
         binding.flFilterWrap.setVisibility(VISIBLE);
     }
 
+    /**
+     * 隐藏筛选项
+     */
     public void dismissFilterLayout() {
         if (currentShowFilter != null) {
             currentShowFilter.dismiss();
@@ -118,6 +129,9 @@ public class PPFilterLayout extends FrameLayout {
         binding.flFilterWrap.setVisibility(GONE);
     }
 
+    /**
+     * 清空筛选数据
+     */
     public void cleanFilter() {
         if (tabFilters == null || tabFilters.size() == 0) {
             return;

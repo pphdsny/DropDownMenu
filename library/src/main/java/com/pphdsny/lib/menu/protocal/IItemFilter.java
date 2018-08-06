@@ -5,7 +5,17 @@ package com.pphdsny.lib.menu.protocal;
  */
 public interface IItemFilter<T> {
 
+    /**
+     * 初始化数据
+     *
+     * @param t
+     */
     void initData(T t);
 
+    /**
+     * 设置子项选中否
+     *
+     * @param isSelect
+     */
     void setSelect(boolean isSelect);
 }

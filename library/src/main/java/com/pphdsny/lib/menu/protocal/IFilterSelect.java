@@ -8,7 +8,17 @@ import com.pphdsny.lib.menu.listener.OnFilterListener;
  */
 public interface IFilterSelect<T> {
 
+    /**
+     * 设置选中回调
+     *
+     * @param filterSureCallback
+     */
     void setFilterSureCallback(OnFilterListener<T> filterSureCallback);
 
+    /**
+     * 获取选中数据
+     *
+     * @return
+     */
     T getSelectFilterData();
 }

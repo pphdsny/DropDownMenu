@@ -42,14 +42,18 @@ public class MainActivity extends AppCompatActivity {
                 new LocalCache<FilterComplexConditionModel>(),
                 new AssetCache<FilterComplexConditionModel>()
         );
+        //数据工厂
         final CacheFactory<FilterComplexConditionModel> cacheFactory = new CacheFactory<>(cacheStrategy);
+        //筛选参数
         final FilterCacheParam filterCacheParam = new FilterCacheParam(1002);
+        //获取数据
         cacheFactory.getData(filterCacheParam)
                 .subscribe(new Action1<FilterComplexConditionModel>() {
                     @Override
                     public void call(FilterComplexConditionModel filterComplexConditionModel) {
                         //将数据保存起来
                         cacheFactory.saveData(filterCacheParam,filterComplexConditionModel);
+                        //填充tab
                         setTabData(filterComplexConditionModel);
                     }
                 }, new Action1<Throwable>() {
@@ -115,10 +119,8 @@ public class MainActivity extends AppCompatActivity {
         tabList.add(sortFilterVH);
         tabList.add(roomFilterVH);
         tabList.add(areaFilterVH);
-        //
+        //添加到View中
         binding.filterLayout.initTab(tabList);
-
     }
-
 
 }
